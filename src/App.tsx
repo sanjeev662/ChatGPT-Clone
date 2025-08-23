@@ -12,7 +12,7 @@ const useResponsiveSidebar = () => {
   useEffect(() => {
     const checkScreenSize = () => {
       const mobile = window.innerWidth < 768;
-      
+
       if (mobile) {
         setSidebarOpen(false);
       } else {
@@ -23,7 +23,7 @@ const useResponsiveSidebar = () => {
     checkScreenSize();
 
     window.addEventListener('resize', checkScreenSize);
-    
+
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
@@ -41,7 +41,7 @@ const useResponsiveSidebar = () => {
 
   return {
     sidebarOpen,
-    sidebarCollapsed,   
+    sidebarCollapsed,
     toggleSidebar,
     closeSidebar,
     toggleCollapse
@@ -98,23 +98,23 @@ function App() {
           >
             <Menu className="w-5 h-5" />
           </button>
-          
+
           <div className="flex-1 text-center">
             <button className={`flex items-center gap-1 text-lg font-medium mx-auto ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
               ChatGPT
               <ChevronDown className="w-4 h-4" />
             </button>
           </div>
-          
+
           {sidebarOpen && (
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={createNewConversation}
-              className={`p-2 ${theme === 'dark' ? 'hover:bg-[#565869] text-white' : 'hover:bg-gray-100 text-gray-700'} rounded-lg transition-colors`}
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={createNewConversation}
+                className={`p-2 ${theme === 'dark' ? 'hover:bg-[#565869] text-white' : 'hover:bg-gray-100 text-gray-700'} rounded-lg transition-colors`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           )}
         </div>
 
