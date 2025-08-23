@@ -1,176 +1,147 @@
-# ChatGPT Clone
+# ChatGPT Clone - Next.js
 
-A responsive ChatGPT-style interface built with React, TypeScript, and Tailwind CSS. This project replicates the core functionality and design of ChatGPT with features like conversation management, file uploads, message editing, and streaming responses.
+A modern ChatGPT clone built with Next.js 14, React, TypeScript, and Tailwind CSS.
 
-![ChatGPT Clone](https://img.shields.io/badge/React-18.3.1-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-blue) ![Vite](https://img.shields.io/badge/Vite-5.4.2-purple) ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.1-cyan)
+## Features
 
-## ✨ Features
+- 🎨 **Modern UI**: Clean, responsive design matching ChatGPT's interface
+- 🌓 **Dark/Light Mode**: Toggle between themes
+- 💬 **Real-time Chat**: Simulated AI responses with typing animation
+- 📁 **File Uploads**: Support for images and documents
+- 💾 **Persistent Storage**: Conversations saved in localStorage
+- 📱 **Mobile Responsive**: Works seamlessly on all devices
+- ⚡ **Fast Performance**: Built with Next.js 14 and optimized for speed
 
-### 🎨 User Interface
-- **Pixel-perfect ChatGPT design** - Authentic recreation of the ChatGPT interface
-- **Dark/Light theme support** - Toggle between themes with persistent storage
-- **Responsive design** - Optimized for desktop, tablet, and mobile devices
-- **Collapsible sidebar** - Space-efficient navigation with expand/collapse functionality
-- **Smooth animations** - Polished transitions and hover effects
+## Tech Stack
 
-### 💬 Chat Functionality
-- **Real-time streaming responses** - Simulated AI responses with typing animation
-- **Message editing** - Edit and update sent messages
-- **Conversation management** - Create, select, and delete conversations
-- **Persistent storage** - Conversations saved in localStorage
-- **Message actions** - Copy, like/dislike, share, and regenerate responses
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Custom components with Lucide React icons
+- **Markdown**: React Markdown with syntax highlighting
+- **State Management**: React hooks (useState, useEffect)
 
-### 📁 File Handling
-- **File upload support** - Drag & drop or click to upload files
-- **Image previews** - Visual previews for uploaded images
-- **Multiple file types** - Support for documents, images, and various file formats
-- **File size formatting** - Human-readable file size display
-
-### 🎯 Advanced Features
-- **Markdown rendering** - Rich text formatting with ReactMarkdown
-- **Syntax highlighting** - Code blocks with Prism.js highlighting
-- **Auto-resizing input** - Dynamic textarea that grows with content
-- **Keyboard shortcuts** - Enter to send, Shift+Enter for new line
-- **Mobile-optimized** - Touch-friendly interface for mobile devices
-
-## 🛠️ Technologies Used
-
-### Frontend Framework
-- **React 18.3.1** - Modern React with hooks and functional components
-- **TypeScript 5.5.3** - Type-safe development with full TypeScript support
-- **Vite 5.4.2** - Fast build tool and development server
-
-### Styling & UI
-- **Tailwind CSS 3.4.1** - Utility-first CSS framework for rapid styling
-- **Lucide React 0.344.0** - Beautiful, customizable SVG icons
-- **PostCSS & Autoprefixer** - CSS processing and vendor prefixing
-
-### Rich Text & Code
-- **React Markdown 10.1.0** - Markdown rendering with GitHub Flavored Markdown
-- **React Syntax Highlighter 15.6.3** - Syntax highlighting for code blocks
-- **Remark GFM 4.0.1** - GitHub Flavored Markdown support
-
-### Development Tools
-- **ESLint 9.9.1** - Code linting with React-specific rules
-- **TypeScript ESLint 8.3.0** - TypeScript-aware linting
-- **Vite React Plugin** - Optimized React development experience
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn package manager
+
+- Node.js 18+ 
+- npm or yarn
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd ChatGPT-Clone
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open your browser**
-   Navigate to `http://localhost:5173` to view the application
-
-### Build for Production
-
+1. Clone the repository:
 ```bash
-npm run build
-npm run preview
+git clone <repository-url>
+cd chatgpt-nextjs
 ```
 
-## 📁 Project Structure
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
 
 ```
-src/
-├── components/           # React components
-│   ├── ChatArea.tsx     # Main chat display area
-│   ├── FileUpload.tsx   # File upload component
+chatgpt-nextjs/
+├── app/                    # Next.js app directory
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx          # Home page
+├── components/            # React components
+│   ├── ChatArea.tsx      # Main chat interface
+│   ├── FileUpload.tsx    # File upload component
 │   ├── MessageBubble.tsx # Individual message display
-│   ├── MessageInput.tsx  # Message input with file upload
-│   └── Sidebar.tsx      # Navigation sidebar
-├── hooks/               # Custom React hooks
-│   └── useChat.ts       # Chat state management hook
-├── types/               # TypeScript type definitions
-│   └── index.ts         # Core interfaces and types
-├── utils/               # Utility functions
-│   ├── aiSimulator.ts   # AI response simulation
-│   ├── fileUtils.ts     # File processing utilities
-│   └── storage.ts       # LocalStorage management
-├── App.tsx              # Main application component
-├── main.tsx             # Application entry point
-└── index.css            # Global styles and Tailwind imports
+│   ├── MessageInput.tsx  # Message input form
+│   └── Sidebar.tsx       # Navigation sidebar
+├── hooks/                 # Custom React hooks
+│   └── useChat.ts        # Chat state management
+├── types/                 # TypeScript type definitions
+│   └── index.ts          # Shared types
+├── utils/                 # Utility functions
+│   ├── aiSimulator.ts    # AI response simulation
+│   ├── fileUtils.ts      # File handling utilities
+│   └── storage.ts        # localStorage utilities
+└── public/               # Static assets
 ```
 
-## 🎯 Key Components
+## Features in Detail
 
-### `useChat` Hook
-Central state management for:
-- Conversation management
-- Message handling
-- Theme switching
-- Local storage persistence
+### Chat Interface
+- Clean, modern design inspired by ChatGPT
+- Message bubbles with proper styling for user and AI messages
+- Markdown support with syntax highlighting for code blocks
+- Copy, edit, and regenerate message functionality
 
-### `MessageBubble`
-Renders individual messages with:
-- Markdown and code syntax highlighting
-- File attachment display
-- Edit functionality
-- Action buttons (copy, like, share)
-
-### `Sidebar`
-Navigation component featuring:
-- Conversation list
-- Theme toggle
-- Collapsible design
+### Sidebar Navigation
+- Collapsible sidebar with conversation history
+- Search functionality (UI ready)
+- Theme toggle between light and dark modes
 - User profile section
 
-### `MessageInput`
-Input component with:
-- Auto-resizing textarea
-- File upload integration
-- Keyboard shortcuts
-- Send button with state management
+### File Handling
+- Drag and drop file uploads
+- Image preview support
+- File size and type validation
+- Multiple file attachments per message
 
-## 🎨 Design Features
+### Responsive Design
+- Mobile-first approach
+- Adaptive sidebar behavior
+- Touch-friendly interface
+- Optimized for all screen sizes
 
-- **Authentic ChatGPT styling** with custom color schemes
-- **Smooth transitions** and hover effects
-- **Mobile-first responsive design**
-- **Dark mode** with proper contrast ratios
-- **Loading states** and streaming animations
-- **Accessible UI** with proper ARIA labels and keyboard navigation
+## Customization
 
-## 🔧 Configuration
+### Themes
+The app supports light and dark themes. You can customize colors in `tailwind.config.js`:
 
-### Tailwind CSS
-Custom configuration for ChatGPT-specific colors and utilities.
+```javascript
+theme: {
+  extend: {
+    colors: {
+      'chat-dark': '#343541',
+      'chat-darker': '#202123',
+      'chat-border': '#565869',
+      // Add your custom colors
+    },
+  },
+}
+```
 
-### Vite
-Optimized build configuration with React plugin and dependency exclusions.
+### AI Responses
+Modify the AI response simulation in `utils/aiSimulator.ts` to:
+- Add more response variations
+- Implement context-aware responses
+- Connect to real AI APIs (OpenAI, Anthropic, etc.)
 
-### TypeScript
-Strict type checking with modern ES features enabled.
+## Deployment
 
-## 📱 Browser Support
+### Vercel (Recommended)
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Deploy with zero configuration
 
-- Chrome (latest)
-- Firefox (latest)  
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+### Other Platforms
+The app can be deployed to any platform that supports Next.js:
+- Netlify
+- Railway
+- AWS Amplify
+- Docker containers
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -178,17 +149,12 @@ Strict type checking with modern ES features enabled.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Design inspiration from OpenAI's ChatGPT interface
+- Design inspired by OpenAI's ChatGPT interface
+- Built with modern React and Next.js best practices
 - Icons provided by Lucide React
-- Syntax highlighting powered by Prism.js
-- Built with the amazing React and TypeScript ecosystem
-
----
-
-**Note**: This is a demonstration project that simulates AI responses. For production use, integrate with actual AI APIs like OpenAI's GPT models or other language model services.

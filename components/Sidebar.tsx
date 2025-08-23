@@ -1,19 +1,21 @@
-import React from 'react';
-import { Search, MessageSquare, Trash2, Sun, Moon, LogOut, Edit3, Library, Zap, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { Conversation } from '../types';
+'use client'
+
+import React from 'react'
+import { Search, MessageSquare, Trash2, Sun, Moon, LogOut, Edit3, Library, Zap, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { Conversation } from '@/types'
 
 interface SidebarProps {
-  conversations: Conversation[];
-  currentConversationId: string | null;
-  onSelectConversation: (id: string) => void;
-  onNewConversation: () => void;
-  onDeleteConversation: (id: string) => void;
-  theme: 'light' | 'dark';
-  onToggleTheme: () => void;
-  isOpen: boolean;
-  isCollapsed: boolean;
-  onClose: () => void;  
-  onToggleCollapse: () => void;
+  conversations: Conversation[]
+  currentConversationId: string | null
+  onSelectConversation: (id: string) => void
+  onNewConversation: () => void
+  onDeleteConversation: (id: string) => void
+  theme: 'light' | 'dark'
+  onToggleTheme: () => void
+  isOpen: boolean
+  isCollapsed: boolean
+  onClose: () => void  
+  onToggleCollapse: () => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -39,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
       
       <div className={`
-        fixed left-0 top-0 h-full bg-[#202123] border-r border-[#565869] transform transition-all duration-300 z-50
+        fixed left-0 top-0 h-full bg-chat-darker border-r border-chat-border transform transition-all duration-300 z-50
         md:relative
         ${isOpen 
           ? 'translate-x-0' 
@@ -150,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       className={`
                         group flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors relative
                         ${currentConversationId === conversation.id
-                          ? 'bg-[#343541]'
+                          ? 'bg-chat-dark'
                           : 'hover:bg-white/10'
                         }
                       `}
@@ -162,8 +164,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       </span>
                       <button
                         onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteConversation(conversation.id);
+                          e.stopPropagation()
+                          onDeleteConversation(conversation.id)
                         }}
                         className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/10 rounded transition-opacity"
                       >
@@ -218,5 +220,5 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
       </div>
     </>
-  );
-};
+  )
+}

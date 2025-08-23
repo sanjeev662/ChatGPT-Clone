@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Mic } from 'lucide-react';
-import { FileUpload } from './FileUpload';
-import { FileAttachment } from '../types';
+'use client'
+
+import React, { useState, useRef, useEffect } from 'react'
+import { Send, Mic } from 'lucide-react'
+import { FileUpload } from './FileUpload'
+import { FileAttachment } from '@/types'
 
 interface MessageInputProps {
-  onSendMessage: (content: string, attachments?: FileAttachment[]) => void; 
-  placeholder?: string;
-  theme?: 'light' | 'dark';
+  onSendMessage: (content: string, attachments?: FileAttachment[]) => void 
+  placeholder?: string
+  theme?: 'light' | 'dark'
 }
 
 export const MessageInput: React.FC<MessageInputProps> = ({
@@ -14,58 +16,58 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   placeholder = "Message ChatGPT",
   theme = 'light'
 }) => {
-  const [message, setMessage] = useState('');
-  const [attachments, setAttachments] = useState<FileAttachment[]>([]);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [message, setMessage] = useState('')
+  const [attachments, setAttachments] = useState<FileAttachment[]>([])
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (message.trim() || attachments.length > 0) {
-      onSendMessage(message, attachments);
-      setMessage('');
-      setAttachments([]);
+      onSendMessage(message, attachments)
+      setMessage('')
+      setAttachments([])
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
+      e.preventDefault()
+      handleSubmit(e)
     }
-  };
+  }
 
   const handleFilesAdded = (newFiles: FileAttachment[]) => {
-    setAttachments(prev => [...prev, ...newFiles]);
-  };
+    setAttachments(prev => [...prev, ...newFiles])
+  }
 
   const handleRemoveFile = (id: string) => {
-    setAttachments(prev => prev.filter(file => file.id !== id));
-  };
+    setAttachments(prev => prev.filter(file => file.id !== id))
+  }
 
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
     }
-  }, [message]);
+  }, [message])
 
   return (
-    <div className={`px-4 pb-6 ${theme === 'dark' ? 'bg-[#343541]' : 'bg-white'}`}>
+    <div className={`px-4 pb-6 ${theme === 'dark' ? 'bg-chat-dark' : 'bg-white'}`}>
       <div className="max-w-3xl mx-auto">
         <form onSubmit={handleSubmit}>
           <div className={`relative rounded-3xl shadow-lg border ${
             theme === 'dark' 
-              ? 'bg-[#40414f] border-[#565869]' 
+              ? 'bg-chat-gray border-chat-border' 
               : 'bg-white border-gray-200'
           }`}>
             {/* File attachments display */}
             {attachments.length > 0 && (
-              <div className={`px-4 pt-3 pb-2 border-b ${theme === 'dark' ? 'border-[#565869]' : 'border-gray-200'}`}>
+              <div className={`px-4 pt-3 pb-2 border-b ${theme === 'dark' ? 'border-chat-border' : 'border-gray-200'}`}>
                 <div className="flex flex-wrap gap-2">
                   {attachments.map((file) => (
                     <div key={file.id} className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
-                      theme === 'dark' ? 'bg-[#565869] text-white' : 'bg-white text-gray-800'
+                      theme === 'dark' ? 'bg-chat-border text-white' : 'bg-white text-gray-800'
                     }`}>
                       <span className="truncate max-w-32">{file.name}</span>
                       <button
@@ -147,5 +149,5 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
