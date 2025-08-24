@@ -1,18 +1,5 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
   "framework": "nextjs",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "env": {
-    "OPENAI_API_KEY": "@openai-api-key",
-    "MONGODB_URI": "@mongodb-uri",
-    "CLOUDINARY_CLOUD_NAME": "@cloudinary-cloud-name",
-    "CLOUDINARY_API_KEY": "@cloudinary-api-key",
-    "CLOUDINARY_API_SECRET": "@cloudinary-api-secret",
-    "NEXTAUTH_SECRET": "@nextauth-secret",
-    "NEXTAUTH_URL": "@nextauth-url"
-  },
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
