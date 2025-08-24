@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { OpenAI } from 'openai'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
-import OpenAI from 'openai'
 import { getDatabase } from '@/lib/mongodb'
 import { DBConversation, DBMessage } from '@/lib/models/conversation'
+import { FileAttachment } from '@/types'
 import { memoryService } from '@/lib/memory'
 
 const openai = new OpenAI({
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
         // Add file content to the message if attachments exist
         if (msg.attachments && msg.attachments.length > 0) {
           const fileContents = msg.attachments
-            .map(file => {
+            .map((file: FileAttachment) => {
               if (file.textContent) {
                 return `\n\n--- File: ${file.name} ---\n${file.textContent}\n--- End of ${file.name} ---`
               } else if (file.type.startsWith('image/')) {
@@ -70,7 +71,7 @@ export async function POST(req: NextRequest) {
     })
 
     // Convert the response to a stream
-    const stream = OpenAIStream(response, {
+    const stream = OpenAIStream(response as any, {
       onStart: async () => {
         // Save conversation start to database
         if (conversationId) {
@@ -106,51 +107,71 @@ export async function POST(req: NextRequest) {
 function getMaxTokensForModel(model: string): number {
   const tokenLimits: Record<string, number> = {
     'gpt-3.5-turbo': 4096,
-    'gpt-3.5-turbo-16k': 16384,
     'gpt-4': 8192,
-    'gpt-4-32k': 32768,
     'gpt-4-turbo': 128000,
-    'gpt-4-turbo-preview': 128000,
+    'gpt-4o': 128000,
   }
   return tokenLimits[model] || 4096
 }
 
 async function truncateMessages(messages: any[], maxTokens: number, memoryContext: string = ''): Promise<any[]> {
-  // Simple token estimation (roughly 4 characters per token)
-  const estimateTokens = (text: string) => Math.ceil(text.length / 4)
-  
-  let totalTokens = estimateTokens(memoryContext)
+  // Simple token estimation (rough approximation)
+  const estimateTokens = (text: string): number => {
+    return Math.ceil(text.length / 4)
+  }
+
+  const contextTokens = estimateTokens(memoryContext)
+  const availableTokens = Math.floor(maxTokens * 0.7) - contextTokens // Reserve 30% for response
+
+  let totalTokens = 0
   const truncatedMessages = []
   
-  // Add memory context as system message if available
+  // Always include system messages and memory context
+  const systemMessages = messages.filter(msg => msg.role === 'system')
+  const otherMessages = messages.filter(msg => msg.role !== 'system').reverse() // Start from most recent
+  
+  // Add system messages
+  for (const msg of systemMessages) {
+    const tokens = estimateTokens(msg.content)
+    totalTokens += tokens
+    truncatedMessages.push(msg)
+  }
+  
+  // Add memory context if available
   if (memoryContext) {
     truncatedMessages.push({
       role: 'system',
-      content: memoryContext + 'Use this context to provide more relevant and personalized responses.'
+      content: memoryContext
     })
   }
   
-  // Always keep the original system message if it exists
-  if (messages[0]?.role === 'system') {
-    truncatedMessages.push(messages[0])
-    totalTokens += estimateTokens(messages[0].content)
-  }
-  
-  // Add messages from the end, keeping within token limit
-  for (let i = messages.length - 1; i >= (messages[0]?.role === 'system' ? 1 : 0); i--) {
-    const messageTokens = estimateTokens(messages[i].content)
-    if (totalTokens + messageTokens > maxTokens * 0.7) { // Use 70% of limit for safety with memory
+  // Add other messages from most recent, respecting token limit
+  for (const msg of otherMessages) {
+    let messageContent = msg.content
+    
+    // Include attachment content in token calculation
+    if (msg.attachments && msg.attachments.length > 0) {
+      const attachmentContent = msg.attachments
+        .map((file: FileAttachment) => file.textContent || `[${file.name}]`)
+        .join(' ')
+      messageContent += ' ' + attachmentContent
+    }
+    
+    const tokens = estimateTokens(messageContent)
+    
+    if (totalTokens + tokens > availableTokens) {
       break
     }
-    truncatedMessages.push(messages[i])
-    totalTokens += messageTokens
+    
+    totalTokens += tokens
+    truncatedMessages.push(msg)
   }
+
+  // Reverse to get chronological order
+  const systemMsgs = truncatedMessages.filter(msg => msg.role === 'system')
+  const otherMsgs = truncatedMessages.filter(msg => msg.role !== 'system').reverse()
   
-  // Reverse to maintain chronological order (except for system messages at the beginning)
-  const systemMessages = truncatedMessages.filter(m => m.role === 'system')
-  const otherMessages = truncatedMessages.filter(m => m.role !== 'system').reverse()
-  
-  return [...systemMessages, ...otherMessages]
+  return [...systemMsgs, ...otherMsgs]
 }
 
 async function saveConversationStart(conversationId: string, messages: any[]) {

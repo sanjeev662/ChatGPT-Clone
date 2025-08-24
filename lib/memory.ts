@@ -1,21 +1,24 @@
 import { getDatabase } from './mongodb'
 import { ConversationMemory } from './models/conversation'
+import { Db } from 'mongodb'
 
 export class MemoryService {
-  private db: any
+  private db: Db | null = null
 
   constructor() {
     this.initializeDB()
   }
 
   private async initializeDB() {
-    this.db = await getDatabase()
+    if (!this.db) {
+      this.db = await getDatabase()
+    }
   }
 
   async createMemory(conversationId: string, messages: any[], userId?: string): Promise<ConversationMemory> {
     if (!this.db) await this.initializeDB()
     
-    const collection = this.db.collection<ConversationMemory>('memories')
+    const collection = this.db!.collection<ConversationMemory>('memories')
     
     // Extract key information from messages
     const summary = this.generateSummary(messages)
@@ -39,7 +42,7 @@ export class MemoryService {
   async updateMemory(conversationId: string, messages: any[]): Promise<void> {
     if (!this.db) await this.initializeDB()
     
-    const collection = this.db.collection<ConversationMemory>('memories')
+    const collection = this.db!.collection<ConversationMemory>('memories')
     
     const summary = this.generateSummary(messages)
     const keyPoints = this.extractKeyPoints(messages)
@@ -62,14 +65,14 @@ export class MemoryService {
   async getMemory(conversationId: string): Promise<ConversationMemory | null> {
     if (!this.db) await this.initializeDB()
     
-    const collection = this.db.collection<ConversationMemory>('memories')
+    const collection = this.db!.collection<ConversationMemory>('memories')
     return await collection.findOne({ conversationId })
   }
 
   async getRelevantContext(query: string, userId?: string): Promise<ConversationMemory[]> {
     if (!this.db) await this.initializeDB()
     
-    const collection = this.db.collection<ConversationMemory>('memories')
+    const collection = this.db!.collection<ConversationMemory>('memories')
     
     // Simple text search - in production, you'd use vector search
     const memories = await collection.find({
@@ -138,7 +141,7 @@ export class MemoryService {
       }
     })
     
-    return [...new Set(entities)] // Remove duplicates
+    return Array.from(new Set(entities)) // Remove duplicates
   }
 
   private extractTopics(messages: any[]): string[] {
@@ -164,14 +167,14 @@ export class MemoryService {
   async deleteMemory(conversationId: string): Promise<void> {
     if (!this.db) await this.initializeDB()
     
-    const collection = this.db.collection<ConversationMemory>('memories')
+    const collection = this.db!.collection<ConversationMemory>('memories')
     await collection.deleteOne({ conversationId })
   }
 
   async searchMemories(query: string, userId?: string, limit: number = 10): Promise<ConversationMemory[]> {
     if (!this.db) await this.initializeDB()
     
-    const collection = this.db.collection<ConversationMemory>('memories')
+    const collection = this.db!.collection<ConversationMemory>('memories')
     
     const searchQuery: any = {
       $text: { $search: query }
