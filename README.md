@@ -137,35 +137,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 1. Create a [Cloudinary account](https://cloudinary.com/)
 2. Get your cloud name, API key, and API secret from the dashboard
 3. Add them to your environment file
-
-## 📁 Project Structure
-
-\`\`\`
-ChatGPT-Clone/
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   │   ├── chat/          # Chat completion endpoint
-│   │   ├── upload/        # File upload endpoint
-│   │   └── conversations/ # Conversation CRUD
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx          # Main page
-├── components/            # React components
-│   ├── ChatArea.tsx      # Chat message display
-│   ├── FileUpload.tsx    # File upload component
-│   ├── MessageBubble.tsx # Individual message display
-│   ├── MessageInput.tsx  # Message input with file upload
-│   └── Sidebar.tsx       # Chat history sidebar
-├── hooks/                # Custom React hooks
-│   └── useChat.ts        # Main chat logic hook
-├── lib/                  # Utility libraries
-│   ├── mongodb.ts        # MongoDB connection
-│   ├── cloudinary.ts     # Cloudinary configuration
-│   └── models/           # Database models
-├── types/                # TypeScript type definitions
-├── utils/                # Utility functions
-└── README.md            # This file
-\`\`\`
+   
 
 ## 🎯 Key Features Explained
 
