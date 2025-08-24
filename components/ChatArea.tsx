@@ -2,12 +2,15 @@
 
 import React, { useEffect, useRef } from 'react'
 import { MessageBubble } from './MessageBubble'
+import { TypingIndicator } from './TypingIndicator'
 import { Message } from '@/types'
 
 interface ChatAreaProps {
   messages: Message[]
   onEditMessage: (messageId: string, newContent: string) => void
   onToggleEdit: (messageId: string) => void
+  onRegenerate?: (messageId: string) => void
+  isStreaming?: boolean
   theme?: 'light' | 'dark'
 }
 
@@ -15,6 +18,8 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   messages,
   onEditMessage,
   onToggleEdit,
+  onRegenerate,
+  isStreaming = false,
   theme = 'light'
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -101,9 +106,13 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
           message={message}
           onEdit={onEditMessage}
           onToggleEdit={onToggleEdit}
+          onRegenerate={onRegenerate}
           theme={theme}
         />
-      ))}     
+      ))}
+      {isStreaming && messages.length > 0 && messages[messages.length - 1]?.role === 'user' && (
+        <TypingIndicator theme={theme} />
+      )}
       <div ref={messagesEndRef} />
     </div>
   )

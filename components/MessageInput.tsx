@@ -36,8 +36,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   }
 
-  const handleFilesAdded = (newFiles: FileAttachment[]) => {
-    setAttachments(prev => [...prev, ...newFiles])
+  const handleFilesUploaded = (newFiles: FileAttachment[]) => {
+    setAttachments(newFiles)
   }
 
   const handleRemoveFile = (id: string) => {
@@ -87,7 +87,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               {/* File Upload */}
               <div className="flex-shrink-0">
                 <FileUpload
-                  onFilesAdded={handleFilesAdded}
+                  onFilesUploaded={handleFilesUploaded}
+                  mode="button"
+                  theme={theme}
                 />
               </div>
               
@@ -98,12 +100,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                className={`flex-1 bg-transparent border-none outline-none resize-none min-h-[24px] max-h-32 focus:outline-none ${
+                className={`flex-1 bg-transparent border-none outline-none resize-none min-h-[24px] max-h-32 focus:outline-none text-base ${
                   theme === 'dark' 
                     ? 'placeholder-gray-400 text-white' 
                     : 'placeholder-gray-500 text-gray-900'
                 }`}
                 rows={1}
+                aria-label="Message input"
+                aria-describedby="message-input-help"
               />
               
               {/* Right side buttons */}
@@ -111,11 +115,12 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 {!message.trim() && attachments.length === 0 && (
                   <button
                     type="button"
-                    className={`p-2 transition-colors ${
+                    className={`p-2 transition-colors focus-ring ${
                       theme === 'dark' 
                         ? 'text-gray-400 hover:text-gray-200' 
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
+                    aria-label="Voice input"
                   >
                     <Mic className="w-5 h-5" />
                   </button>
@@ -124,11 +129,12 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 {(message.trim() || attachments.length > 0) && (
                   <button
                     type="submit"
-                    className={`p-2 rounded-full transition-colors ${
+                    className={`p-2 rounded-full transition-colors focus-ring ${
                       theme === 'dark'
                         ? 'bg-white text-black hover:bg-gray-200 disabled:bg-gray-600 disabled:text-gray-400'
                         : 'bg-black text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500'
                     } disabled:cursor-not-allowed`}
+                    aria-label="Send message"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -140,9 +146,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         
         {/* Footer text */}
         <div className="text-center mt-3">
-          <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+          <p id="message-input-help" className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
             ChatGPT can make mistakes. Check important info. 
-            <button className="underline ml-1 hover:text-gray-600">
+            <button className="underline ml-1 hover:text-gray-600 focus-ring">
               See Cookie Preferences
             </button>
           </p>

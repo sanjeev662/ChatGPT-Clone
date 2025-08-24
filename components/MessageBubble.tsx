@@ -29,6 +29,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   const handleSaveEdit = () => {
     onEdit(message.id, editContent)
+    // If this is a user message, trigger regeneration of subsequent messages
+    if (message.role === 'user' && onRegenerate) {
+      onRegenerate(message.id)
+    }
   }
 
   const handleCancelEdit = () => {
@@ -45,11 +49,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   const isUser = message.role === 'user'
 
   return (
-    <div className={`px-4 py-3 ${theme === 'dark' ? 'bg-chat-dark' : 'bg-white'}`}>
+    <div className={`px-4 py-3 message-bubble ${theme === 'dark' ? 'bg-chat-dark' : 'bg-white'}`}>
       <div className="max-w-4xl mx-auto">
-        <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
+        <div className={`flex gap-2 sm:gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
           {/* Message Content */}
-          <div className={`max-w-2xl ${isUser ? 'order-first' : 'order-last'}`}>
+          <div className={`max-w-xs sm:max-w-lg md:max-w-2xl ${isUser ? 'order-first' : 'order-last'}`}>
             <div className={`rounded-2xl px-3 py-2 ${
               isUser 
                 ? (theme === 'dark' 
@@ -66,24 +70,28 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                   <textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
-                    className={`w-full p-3 border rounded-lg resize-none min-h-[100px] ${
+                    className={`w-full p-3 border rounded-lg resize-none min-h-[100px] focus-ring ${
                       theme === 'dark' 
                         ? 'bg-chat-gray border-chat-border text-white placeholder-gray-400' 
                         : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                     }`}
                     autoFocus
+                    aria-label="Edit message content"
+                    placeholder="Edit your message..."
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={handleSaveEdit}
-                      className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 focus-ring"
+                      aria-label="Save message edit"
                     >
                       <Check className="w-4 h-4" />
                       Save
                     </button>
                     <button
                       onClick={handleCancelEdit}
-                      className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                      className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus-ring"
+                      aria-label="Cancel message edit"
                     >
                       <X className="w-4 h-4" />
                       Cancel
@@ -98,10 +106,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                         <div key={file.id} className={`border rounded-lg p-2 ${
                           theme === 'dark' ? 'border-chat-border bg-chat-gray' : 'border-gray-200 bg-gray-50'
                         }`}>
-                          {isImageFile(file.type) && file.preview ? (
+                          {isImageFile(file.type) && (file.preview || file.url) ? (
                             <img
-                              src={file.preview}
-                              alt={file.name}
+                              src={file.preview || file.url}
+                              alt={`Attached image: ${file.name}`}
                               className="w-full h-24 object-cover rounded mb-1"
                             />
                           ) : (

@@ -5,6 +5,8 @@ export interface Message {
   timestamp: Date
   isEditing?: boolean
   attachments?: FileAttachment[]
+  tokens?: number
+  model?: string
 }
 
 export interface FileAttachment {
@@ -14,6 +16,8 @@ export interface FileAttachment {
   type: string
   url: string
   preview?: string
+  cloudinaryId?: string
+  textContent?: string  // Add this line
 }
 
 export interface Conversation {
@@ -22,6 +26,10 @@ export interface Conversation {
   messages: Message[]
   createdAt: Date
   updatedAt: Date
+  userId?: string
+  totalTokens?: number
+  model?: string
+  memoryId?: string
 }
 
 export interface ChatState {
@@ -30,4 +38,19 @@ export interface ChatState {
   isLoading: boolean
   isStreaming: boolean
   theme: 'light' | 'dark'
+  model: string
+}
+
+export interface ChatSettings {
+  model: string
+  temperature: number
+  maxTokens: number
+  enableMemory: boolean
+}
+
+export interface UploadProgress {
+  fileId: string
+  progress: number
+  status: 'uploading' | 'completed' | 'error'
+  error?: string
 }

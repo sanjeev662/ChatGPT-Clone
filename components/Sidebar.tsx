@@ -31,6 +31,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onClose,
   onToggleCollapse
 }) => {
+  // Debug logging
+  React.useEffect(() => {
+    console.log('Sidebar conversations updated:', conversations.length)
+    console.log('Conversations:', conversations.map(c => ({ id: c.id, title: c.title, messageCount: c.messages?.length || 0 })))
+  }, [conversations])
+
   return (
     <>
       {isOpen && (
@@ -144,35 +150,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex-1 overflow-y-auto px-3 sidebar-scroll">
                 <div className="space-y-1">
                   <div className="text-xs text-gray-400 font-medium mb-2 px-2 mt-4">
-                    Chats
+                    Chats ({conversations.length})
                   </div>
-                  {conversations.map((conversation) => (
-                    <div
-                      key={conversation.id}
-                      className={`
-                        group flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors relative
-                        ${currentConversationId === conversation.id
-                          ? 'bg-chat-dark'
-                          : 'hover:bg-white/10'
-                        }
-                      `}
-                      onClick={() => onSelectConversation(conversation.id)}
-                    >
-                      <MessageSquare className="w-4 h-4 flex-shrink-0 text-gray-400" />
-                      <span className="flex-1 truncate text-sm text-white">
-                        {conversation.title}
-                      </span>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          onDeleteConversation(conversation.id)
-                        }}
-                        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/10 rounded transition-opacity"
-                      >
-                        <Trash2 className="w-3 h-3 text-gray-400" />
-                      </button>
+                  {conversations.length === 0 ? (
+                    <div className="text-xs text-gray-500 px-2 py-4 text-center">
+                      No conversations yet
                     </div>
-                  ))}
+                  ) : (
+                    conversations.map((conversation) => (
+                      <div
+                        key={conversation.id}
+                        className={`
+                          group flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors relative
+                          ${currentConversationId === conversation.id
+                            ? 'bg-chat-dark'
+                            : 'hover:bg-white/10'
+                          }
+                        `}
+                        onClick={() => onSelectConversation(conversation.id)}
+                      >
+                        <MessageSquare className="w-4 h-4 flex-shrink-0 text-gray-400" />
+                        <span className="flex-1 truncate text-sm text-white">
+                          {conversation.title || 'Untitled Chat'}
+                        </span>
+                        <span className="text-xs text-gray-500 mr-1">
+                          {conversation.messages?.length || 0}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            console.log('Delete button clicked for conversation:', conversation.id)
+                            onDeleteConversation(conversation.id)
+                          }}
+                          className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/10 rounded transition-opacity"
+                          title="Delete conversation"
+                        >
+                          <Trash2 className="w-3 h-3 text-gray-400 hover:text-red-400" />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             )}

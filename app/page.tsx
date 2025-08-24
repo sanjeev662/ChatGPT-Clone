@@ -62,6 +62,7 @@ export default function Home() {
     conversations,
     currentConversationId,
     theme,
+    isStreaming,
     getCurrentConversation,
     createNewConversation,
     selectConversation,
@@ -69,6 +70,7 @@ export default function Home() {
     editMessage,
     toggleMessageEdit,
     deleteConversation,
+    regenerateResponse,
     toggleTheme
   } = useChat()
 
@@ -123,6 +125,8 @@ export default function Home() {
           messages={currentConversation?.messages || []}
           onEditMessage={editMessage}
           onToggleEdit={toggleMessageEdit}
+          onRegenerate={regenerateResponse}
+          isStreaming={isStreaming}
           theme={theme}
         />
 

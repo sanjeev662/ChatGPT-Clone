@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'ChatGPT Clone - Next.js',
+  title: 'ChatGPT Clone',
   description: 'A ChatGPT clone built with Next.js, React, and Tailwind CSS',
 }
 
